@@ -1,10 +1,10 @@
 const { res200 } = require("../../../utils/responses");
-const planetsModel = require("../../../models/planets.model");
+const { getAllPlanets } = require("../../../models/planets.model");
 
-function getAllPlanets(req, res) {
-  res200(req, res, planetsModel);
+function httpGetAllPlanets(req, res) {
+  res200(req, res, getAllPlanets());
 }
 
 module.exports = {
-  getAllPlanets,
+  httpGetAllPlanets,
 };

@@ -26,7 +26,7 @@ async function Get(baseUrl, path, request) {
         resolve(resp.data);
       })
       .catch((error) => {
-        reject("(GET) error: ", error);
+        reject(`(GET) error: ${error}`);
       });
   });
 
@@ -44,10 +44,11 @@ async function Post(baseUrl, path, request, uploadFile) {
       headers,
     })
       .then((resp) => {
+        console.log("resp (aja): ", resp);
         resolve(resp.data);
       })
       .catch((error) => {
-        reject("(POST) error: ", error);
+        reject(`(POST) error: ${error}`);
       });
   });
   return promise;
@@ -67,7 +68,7 @@ async function Put(baseUrl, path, request) {
         resolve(resp.data);
       },
       (error) => {
-        reject("(PUT) error: ", error);
+        reject(`(PUT) error: ${error}`);
       }
     );
   });
@@ -76,19 +77,26 @@ async function Put(baseUrl, path, request) {
 
 async function Delete(baseUrl, path, request) {
   const headers = await renderHeaders();
+  const req = [];
+
+  if (request) {
+    Object.keys(request).forEach((item, index) => {
+      req.push(`${[item]}=${request[item]}`);
+    });
+  }
+
   const promise = new Promise((resolve, reject) => {
     axios({
       method: "delete",
       baseURL: process.env.REACT_APP_API_URL ?? baseUrl,
-      url: path,
-      data: request,
+      url: `${path}?${req.join("&") || ""}`,
       headers,
     }).then(
       (res) => {
         resolve(res.data);
       },
       (error) => {
-        reject("(PUT) error: ", error);
+        reject(`(DELETE) error: ${error}`);
       }
     );
   });
