@@ -1,6 +1,6 @@
 const {
   getAllLaunches,
-  addNewLaunch,
+  scheduleNewLaunch,
   existsLaunchWithId,
   abortLaunchById,
 } = require("../../../models/launches.model");
@@ -12,11 +12,11 @@ const {
   res500,
 } = require("../../../utils/responses");
 
-function httpGetAllLaunches(req, res) {
-  return res200(req, res, getAllLaunches());
+async function httpGetAllLaunches(req, res) {
+  return res200(req, res, await getAllLaunches());
 }
 
-function httpPostNewLaunch(req, res) {
+async function httpPostNewLaunch(req, res) {
   const launch = req.body;
 
   if (
@@ -32,23 +32,40 @@ function httpPostNewLaunch(req, res) {
   if (isNaN(launch.launchDate)) {
     return res400(req, res, null, "Invalid launch date");
   }
-  addNewLaunch(launch);
-  res201(req, res, launch, "New Launches created!");
+
+  try {
+    await scheduleNewLaunch(launch);
+    console.log("launch: ", launch);
+    return res201(req, res, launch, "New Launches created!");
+  } catch (error) {
+    console.error(error);
+    return res500(
+      req,
+      res,
+      null,
+      `Unable to insert new launch to database | ${error}`
+    );
+  }
 }
 
-function httpDeleteAbortLaunch(req, res) {
+async function httpDeleteAbortLaunch(req, res) {
   const launchId = Number(req.query.id);
 
   if (isNaN(launchId)) {
     return res400(req, res, null, "id is invalid");
   }
 
-  if (!existsLaunchWithId(launchId)) {
+  const existLaunch = await existsLaunchWithId(launchId);
+
+  if (!existLaunch) {
     return res404(req, res, null, "Launch not found");
   }
+  const aborted = await abortLaunchById(launchId);
 
-  const aborted = abortLaunchById(launchId);
-  return res200(req, res, aborted, "Mission Aborted");
+  if (!aborted) {
+    return res400(req, res, null, `Unable to delete launch mission | ${error}`);
+  }
+  return res200(req, res, { ok: true }, "Mission Aborted");
 }
 
 module.exports = {
