@@ -23,7 +23,7 @@ async function Get(baseUrl, path, request) {
       headers,
     })
       .then((resp) => {
-        resolve(resp.data);
+        resolve(resp);
       })
       .catch((error) => {
         reject(`(GET) error: ${error}`);
@@ -44,8 +44,8 @@ async function Post(baseUrl, path, request, uploadFile) {
       headers,
     })
       .then((resp) => {
-        console.log("resp (aja): ", resp);
-        resolve(resp.data);
+        // console.log("resp: ", resp);
+        resolve(resp);
       })
       .catch((error) => {
         reject(`(POST) error: ${error}`);
@@ -65,7 +65,7 @@ async function Put(baseUrl, path, request) {
       headers,
     }).then(
       (resp) => {
-        resolve(resp.data);
+        resolve(resp);
       },
       (error) => {
         reject(`(PUT) error: ${error}`);
@@ -93,7 +93,7 @@ async function Delete(baseUrl, path, request) {
       headers,
     }).then(
       (res) => {
-        resolve(res.data);
+        resolve(res);
       },
       (error) => {
         reject(`(DELETE) error: ${error}`);
@@ -103,11 +103,11 @@ async function Delete(baseUrl, path, request) {
   return promise;
 }
 
-const Services = {
+const axiosRequest = {
   Get,
   Post,
   Put,
   Delete,
 };
 
-export default Services;
+export default axiosRequest;

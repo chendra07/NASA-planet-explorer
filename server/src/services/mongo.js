@@ -1,21 +1,24 @@
 const mongoose = require("mongoose");
-const { MONGO_USERNAME, MONGO_PASSWORD } = process.env;
-const MONGO_URL = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@nasacluster.s4bftgo.mongodb.net/nasa?retryWrites=true&w=majority`;
-
-console.log("URL (2): ", MONGO_URL);
+require("dotenv").config();
+const { MONGO_URL } = process.env;
 
 mongoose.connection.once("open", () => {
   console.log("MongoDB connection ready!");
 });
 
 mongoose.connection.on("error", (err) => {
-  console.error(err);
+  console.error("[Mongo Connection] ", err);
 });
 
 async function mongoConnect() {
-  mongoose.connect(MONGO_URL);
+  await mongoose.connect(MONGO_URL);
+}
+
+async function mongoDisconnect() {
+  await mongoose.disconnect();
 }
 
 module.exports = {
   mongoConnect,
+  mongoDisconnect,
 };

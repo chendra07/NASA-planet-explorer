@@ -11,9 +11,13 @@ const {
   res404,
   res500,
 } = require("../../../utils/responses");
+const { getPagination } = require("../../../services/query");
 
 async function httpGetAllLaunches(req, res) {
-  return res200(req, res, await getAllLaunches());
+  const { limit, skip } = getPagination(req.query);
+
+  const allLaunches = await getAllLaunches(limit, skip);
+  return res200(req, res, allLaunches);
 }
 
 async function httpPostNewLaunch(req, res) {
@@ -39,7 +43,7 @@ async function httpPostNewLaunch(req, res) {
     return res201(req, res, launch, "New Launches created!");
   } catch (error) {
     console.error(error);
-    return res500(
+    return res400(
       req,
       res,
       null,
@@ -49,9 +53,9 @@ async function httpPostNewLaunch(req, res) {
 }
 
 async function httpDeleteAbortLaunch(req, res) {
-  const launchId = Number(req.query.id);
+  const launchId = Math.abs(req.query.id);
 
-  if (isNaN(launchId)) {
+  if (isNaN(launchId) || !launchId) {
     return res400(req, res, null, "id is invalid");
   }
 

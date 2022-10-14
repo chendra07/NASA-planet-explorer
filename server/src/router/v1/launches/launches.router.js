@@ -7,7 +7,7 @@ const {
 
 const launchesRouter = express.Router();
 
-launchesRouter.get("/", httpGetAllLaunches);
+launchesRouter.get("/all", httpGetAllLaunches);
 launchesRouter.post("/", httpPostNewLaunch);
 launchesRouter.delete("/", httpDeleteAbortLaunch);
 

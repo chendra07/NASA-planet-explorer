@@ -1,59 +1,55 @@
-import Services from "../utils/services";
+import AxiosRequest from "../services/axiosRequest";
 
 const baseUrl = "http://localhost:8000";
 
 async function httpGetPlanets() {
-  const response = await Services.Get(baseUrl, "v1/planets")
+  const response = await AxiosRequest.Get(baseUrl, "v1/planets/all")
     .then((resp) => {
-      console.log("data (planets): ", resp);
-      return resp.data;
+      console.log("data (planets): ", resp.data);
+      return resp.data.data;
     })
     .catch((error) => {
-      console.log(error);
-      return error;
+      throw new Error(error);
     });
 
   return response;
 }
 
 async function httpGetLaunches() {
-  const response = await Services.Get(baseUrl, "v1/launches")
+  const response = await AxiosRequest.Get(baseUrl, "v1/launches/all")
     .then((resp) => {
-      return resp.data.sort((a, b) => {
+      return resp.data.data.sort((a, b) => {
         return a.flightNumber - b.flightNumber;
       });
     })
     .catch((error) => {
-      console.log(error);
-      return error;
+      throw new Error(error);
     });
 
   return response;
 }
 
 async function httpSubmitLaunch(launch) {
-  const response = await Services.Post(baseUrl, "v1/launches", launch)
+  const response = await AxiosRequest.Post(baseUrl, "v1/launches", launch)
     .then((resp) => {
-      console.log(resp);
-      return resp;
+      console.log(resp.data);
+      return resp.data;
     })
     .catch((error) => {
-      console.log(error);
-      return error;
+      throw new Error(error);
     });
 
   return response;
 }
 
 async function httpAbortLaunch(id) {
-  const response = Services.Delete(baseUrl, `v1/launches`, { id })
+  const response = AxiosRequest.Delete(baseUrl, `v1/launches`, { id })
     .then((resp) => {
-      console.log(resp);
-      return resp;
+      console.log(resp.data);
+      return resp.data;
     })
     .catch((error) => {
-      console.log(error);
-      return error;
+      throw new Error(error);
     });
 
   return response;

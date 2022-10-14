@@ -1,39 +1,50 @@
 const request = require("supertest");
 const app = require("../../../app");
-const { mongoConnect } = require("../../../services/mongo");
+const { mongoConnect, mongoDisconnect } = require("../../../services/mongo");
 
 describe("Launches API", () => {
   beforeAll(async () => {
     await mongoConnect();
-  });
+  }, 15000);
 
-  describe("Test GET: v1/launches/", () => {
+  afterAll(async () => {
+    await mongoDisconnect();
+  }, 15000);
+
+  describe("Test GET: v1/launches/all", () => {
     test("should respond 200 success", async () => {
       const response = await request(app)
-        .get("/v1/launches")
+        .get("/v1/launches/all")
         .expect("Content-Type", /json/)
         .expect(200);
-    });
+    }, 15000);
   });
 
   describe("Test POST: v1/launches/", () => {
     const completeLaunchData = {
       mission: "Morgan 115",
       rocket: "V2",
-      target: "Kepler-186 f",
+      target: "Kepler-1410 b",
       launchDate: "January 17, 2030",
     };
 
     const launchDataWithoutDate = {
       mission: "Morgan 115",
       rocket: "V2",
-      target: "Kepler-186 f",
+      target: "Kepler-1410 b",
+    };
+
+    const launchDataWithInvalidTarget = {
+      mission: "Morgan 115",
+      rocket: "V2",
+      target: "Dream Land",
+      launchDate: "January 17, 2030",
     };
 
     const launchDataWithInvalidDate = {
       mission: "Morgan 115",
       rocket: "V2",
-      target: "Kepler-186 f",
+      target: "Kepler-1410 b",
       launchDate: "Heloooooooo!",
     };
 
@@ -76,15 +87,29 @@ describe("Launches API", () => {
         data: null,
       });
     });
+
+    test("should catch invalid planets", async () => {
+      const response = await request(app)
+        .post("/v1/launches")
+        .send(launchDataWithInvalidTarget)
+        .expect("Content-Type", /json/)
+        .expect(400);
+      expect(response.body).toStrictEqual({
+        message:
+          "Unable to insert new launch to database | Error: No matching planets found!",
+        statusCode: 400,
+        data: null,
+      });
+    });
   });
 
   describe("Test Delete: v1/launches/:id", () => {
-    test("should respond 200 success", async () => {
-      const response = await request(app)
-        .delete("/v1/launches?id=100")
-        .expect("Content-Type", /json/)
-        .expect(200);
-    });
+    // test("should respond 200 success", async () => {
+    //   const response = await request(app)
+    //     .delete("/v1/launches?id=100")
+    //     .expect("Content-Type", /json/)
+    //     .expect(200);
+    // });
 
     test("should catch invalid query ID", async () => {
       const response = await request(app)

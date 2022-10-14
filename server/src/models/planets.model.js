@@ -3,8 +3,6 @@ const path = require("path");
 const fs = require("fs");
 const planets = require("./planets.mongo");
 
-// const habitablePlanet = [];
-
 function isHabitablePlanet(planet) {
   return (
     planet["koi_disposition"] === "CONFIRMED" &&
@@ -16,7 +14,7 @@ function isHabitablePlanet(planet) {
 
 async function savePlanet(planet) {
   try {
-    await planets.updateOne(
+    const response = await planets.updateOne(
       {
         keplerName: planet.kepler_name,
       },
@@ -27,10 +25,15 @@ async function savePlanet(planet) {
         upsert: true,
       }
     );
+
+    return response;
   } catch (error) {
-    console.error(`Could not save planet: ${error}`);
+    console.error("[Save Planet] ", error);
+    throw new Error(`[Save Planet] ${error}`);
   }
 }
+
+//===============================================
 
 function loadPlanetsData() {
   return new Promise((resolve, reject) => {
@@ -47,7 +50,7 @@ function loadPlanetsData() {
         }
       })
       .on("error", (error) => {
-        console.log("(fs) error: ", error);
+        console.error("[fs planets] ", error);
         reject(error);
       })
       .on("end", async () => {
