@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const request = require("supertest");
 const app = require("../../../app");
 const { mongoConnect, mongoDisconnect } = require("../../../services/mongo");
@@ -13,7 +14,7 @@ describe("Launches API", () => {
 
   describe("Test GET: v1/launches/all", () => {
     test("should respond 200 success", async () => {
-      const response = await request(app)
+      await request(app)
         .get("/v1/launches/all")
         .expect("Content-Type", /json/)
         .expect(200);
@@ -112,7 +113,7 @@ describe("Launches API", () => {
     // });
 
     test("should catch invalid query ID", async () => {
-      const response = await request(app)
+      await request(app)
         .delete("/v1/launches?id=wow")
         .expect("Content-Type", /json/)
         .expect(400);

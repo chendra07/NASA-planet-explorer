@@ -4,13 +4,7 @@ const {
   existsLaunchWithId,
   abortLaunchById,
 } = require("../../../models/launches.model");
-const {
-  res200,
-  res201,
-  res400,
-  res404,
-  res500,
-} = require("../../../utils/responses");
+const { res200, res201, res400, res404 } = require("../../../utils/responses");
 const { getPagination } = require("../../../services/query");
 
 async function httpGetAllLaunches(req, res) {
@@ -67,7 +61,7 @@ async function httpDeleteAbortLaunch(req, res) {
   const aborted = await abortLaunchById(launchId);
 
   if (!aborted) {
-    return res400(req, res, null, `Unable to delete launch mission | ${error}`);
+    return res400(req, res, null, `Unable to delete launch mission`);
   }
   return res200(req, res, { ok: true }, "Mission Aborted");
 }

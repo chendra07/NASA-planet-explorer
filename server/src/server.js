@@ -1,11 +1,11 @@
 const http = require("http");
 const app = require("./app");
-const mongoose = require("mongoose");
 require("dotenv").config();
 const { mongoConnect } = require("./services/mongo");
 const { loadPlanetsData } = require("./models/planets.model");
 const { loadLaunchesData } = require("./models/launches.model");
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 8000;
 const server = http.createServer(app);
 

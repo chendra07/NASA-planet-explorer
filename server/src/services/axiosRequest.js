@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const axios = require("axios");
 
 const renderHeaders = async (uploadFile) => {
@@ -10,7 +11,7 @@ async function Get(baseUrl, path, request) {
   const headers = await renderHeaders();
   const req = [];
   if (request) {
-    Object.keys(request).forEach((item, index) => {
+    Object.keys(request).forEach((item) => {
       req.push(`${[item]}=${request[item]}`);
     });
   }
@@ -79,7 +80,7 @@ async function Delete(baseUrl, path, request) {
   const req = [];
 
   if (request) {
-    Object.keys(request).forEach((item, index) => {
+    Object.keys(request).forEach((item) => {
       req.push(`${[item]}=${request[item]}`);
     });
   }
