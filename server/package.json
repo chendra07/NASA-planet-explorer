@@ -4,7 +4,6 @@
   "description": "NASA Mission Control API",
   "main": "src/server.js",
   "scripts": {
-    "install": "npm install",
     "test": "jest",
     "test-watch": "jest --watch",
     "start": "node src/server.js",
