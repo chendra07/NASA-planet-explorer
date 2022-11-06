@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const { parse } = require("csv-parse");
 const path = require("path");
 const fs = require("fs");
