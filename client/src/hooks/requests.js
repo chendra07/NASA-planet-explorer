@@ -1,9 +1,9 @@
 import AxiosRequest from "../services/axiosRequest";
 
-const baseUrl = "http://localhost:8000";
+const baseUrl = "v1";
 
 async function httpGetPlanets() {
-  const response = await AxiosRequest.Get(baseUrl, "v1/planets/all")
+  const response = await AxiosRequest.Get(baseUrl, "planets/all")
     .then((resp) => {
       console.log("data (planets): ", resp.data);
       return resp.data.data;
@@ -16,7 +16,7 @@ async function httpGetPlanets() {
 }
 
 async function httpGetLaunches() {
-  const response = await AxiosRequest.Get(baseUrl, "v1/launches/all")
+  const response = await AxiosRequest.Get(baseUrl, "launches/all")
     .then((resp) => {
       return resp.data.data.sort((a, b) => {
         return a.flightNumber - b.flightNumber;
@@ -30,7 +30,7 @@ async function httpGetLaunches() {
 }
 
 async function httpSubmitLaunch(launch) {
-  const response = await AxiosRequest.Post(baseUrl, "v1/launches", launch)
+  const response = await AxiosRequest.Post(baseUrl, "launches", launch)
     .then((resp) => {
       console.log(resp.data);
       return resp.data;
@@ -43,7 +43,7 @@ async function httpSubmitLaunch(launch) {
 }
 
 async function httpAbortLaunch(id) {
-  const response = AxiosRequest.Delete(baseUrl, `v1/launches`, { id })
+  const response = AxiosRequest.Delete(baseUrl, `launches`, { id })
     .then((resp) => {
       console.log(resp.data);
       return resp.data;
