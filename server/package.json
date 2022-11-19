@@ -2,13 +2,13 @@
   "name": "nasa-project-api",
   "version": "1.0.0",
   "description": "NASA Mission Control API",
-  "main": "src/server.js",
+  "main": "server.js",
   "scripts": {
     "test": "jest",
     "test-watch": "jest --watch",
-    "start": "node src/server.js",
-    "watch": "nodemon src/server.js",
-    "cluster": "pm2 start src/server.js -i max",
+    "start": "node server.js",
+    "watch": "nodemon server.js",
+    "cluster": "pm2 start server.js -i max",
     "lint": "eslint .  --ext .js"
   },
   "keywords": [],
