@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
+// eslint-disable-next-line no-undef
 const { MONGO_URL } = process.env;
 
 mongoose.connection.once("open", () => {

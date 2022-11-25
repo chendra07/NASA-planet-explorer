@@ -13,7 +13,8 @@
     "deploy": "npm run build --prefix client && npm start --prefix server",
     "deploy-cluster": "npm run build --prefix client && npm run cluster --prefix server",
     "server-cluster": "npm run cluster --prefix server",
-    "test": "npm run test --prefix server"
+    "test": "npm run test --prefix server",
+    "start": "npm run deploy"
   },
   "keywords": [],
   "author": "",
